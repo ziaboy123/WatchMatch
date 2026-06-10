@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { ScoredWatch } from '@/types'
-import { formatPrice } from '@/lib/utils'
+import { formatEstimatedPrice } from '@/lib/utils'
 import { Droplets, Zap, Maximize2, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -24,17 +24,12 @@ export function WatchCard({ watch, rank, onCompare, isSelectedForCompare }: Watc
       className="group rounded-2xl border bg-card overflow-hidden hover:shadow-lg transition-all duration-300"
     >
       {/* Watch image area */}
-      <div className="relative h-52 bg-gradient-to-br from-secondary to-secondary/60 flex items-center justify-center">
-        {/* Stylised watch face placeholder */}
-        <div className="w-32 h-32 rounded-full border-4 border-foreground/10 flex items-center justify-center shadow-lg">
-          <div className="w-24 h-24 rounded-full border-2 border-foreground/20 bg-card flex items-center justify-center">
-            <div className="text-center">
-              <p className="text-xs font-bold leading-tight">{watch.brand}</p>
-              <div className="w-4 h-0.5 bg-foreground/40 mx-auto my-1" />
-              <div className="w-0.5 h-3 bg-foreground/40 mx-auto" />
-            </div>
-          </div>
-        </div>
+      <div className="relative h-52 bg-secondary/40 overflow-hidden">
+        <img
+          src={watch.image}
+          alt={`${watch.brand} ${watch.model}`}
+          className="absolute inset-0 w-full h-full object-contain p-3"
+        />
 
         {/* Rank badge */}
         <div className="absolute top-3 left-3 w-7 h-7 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center">
@@ -67,7 +62,7 @@ export function WatchCard({ watch, rank, onCompare, isSelectedForCompare }: Watc
             <h3 className="font-semibold text-base leading-snug">{watch.model}</h3>
           </div>
           <div className="text-right flex-shrink-0 ml-3">
-            <p className="font-bold text-lg">{formatPrice(watch.price, watch.currency)}</p>
+            <p className="font-bold text-lg">{formatEstimatedPrice(watch.priceRange)}</p>
             <p className="text-xs text-muted-foreground">{scorePercent}% match</p>
           </div>
         </div>

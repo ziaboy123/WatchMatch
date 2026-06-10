@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { ScoredWatch } from '@/types'
-import { formatPrice } from '@/lib/utils'
+import { formatEstimatedPrice } from '@/lib/utils'
 import { X, Droplets, Zap, Maximize2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -23,7 +23,7 @@ export function CompareDrawer({ watches, onClose }: CompareDrawerProps) {
 
   const rows: SpecRow[] = [
     { label: 'Brand', a: a.brand, b: b.brand },
-    { label: 'Price', a: formatPrice(a.price, a.currency), b: formatPrice(b.price, b.currency) },
+    { label: 'Est. Price', a: formatEstimatedPrice(a.priceRange), b: formatEstimatedPrice(b.priceRange) },
     { label: 'Category', a: a.category, b: b.category },
     { label: 'Case Size', a: `${a.caseSizeMm}mm`, b: `${b.caseSizeMm}mm`, icon: Maximize2 },
     { label: 'Movement', a: a.movement, b: b.movement, icon: Zap },

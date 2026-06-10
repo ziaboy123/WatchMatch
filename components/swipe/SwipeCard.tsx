@@ -2,7 +2,7 @@
 
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion'
 import { Watch, SwipeDecision } from '@/types'
-import { formatPrice } from '@/lib/utils'
+import { formatEstimatedPrice } from '@/lib/utils'
 import { Droplets, Zap, Maximize2, ThumbsUp, ThumbsDown, Minus } from 'lucide-react'
 
 interface SwipeCardProps {
@@ -59,20 +59,13 @@ export function SwipeCard({ watch, onSwipe, isTop }: SwipeCardProps) {
           </div>
         </motion.div>
 
-        {/* Watch face visual */}
-        <div className="flex-1 bg-gradient-to-br from-secondary/80 to-secondary flex items-center justify-center min-h-0 p-8">
-          <div className="relative w-40 h-40 rounded-full border-4 border-foreground/10 shadow-2xl flex items-center justify-center bg-card">
-            <div className="w-32 h-32 rounded-full border-2 border-foreground/15 flex flex-col items-center justify-center gap-1 text-center px-3">
-              <p className="text-xs font-bold uppercase tracking-wider leading-none text-foreground/70">
-                {watch.brand}
-              </p>
-              <div className="w-6 h-px bg-foreground/30" />
-              <p className="text-[10px] text-foreground/50 leading-tight">{watch.model.split(' ').slice(0, 2).join(' ')}</p>
-            </div>
-            {/* Watch hands */}
-            <div className="absolute w-0.5 h-10 bg-foreground/60 rounded-full origin-bottom" style={{ bottom: '50%', left: 'calc(50% - 1px)', transform: 'rotate(-30deg)' }} />
-            <div className="absolute w-0.5 h-7 bg-foreground/80 rounded-full origin-bottom" style={{ bottom: '50%', left: 'calc(50% - 1px)', transform: 'rotate(90deg)' }} />
-          </div>
+        {/* Watch image */}
+        <div className="flex-1 bg-secondary/40 min-h-0 relative overflow-hidden">
+          <img
+            src={watch.image}
+            alt={`${watch.brand} ${watch.model}`}
+            className="absolute inset-0 w-full h-full object-contain p-6"
+          />
         </div>
 
         {/* Info section */}
@@ -85,7 +78,7 @@ export function SwipeCard({ watch, onSwipe, isTop }: SwipeCardProps) {
               <h3 className="font-serif text-xl font-bold leading-tight">{watch.model}</h3>
             </div>
             <div className="text-right shrink-0">
-              <p className="font-bold text-xl">{formatPrice(watch.price, watch.currency)}</p>
+              <p className="font-bold text-xl">{formatEstimatedPrice(watch.priceRange)}</p>
               <p className="text-xs text-muted-foreground">{watch.category}</p>
             </div>
           </div>
