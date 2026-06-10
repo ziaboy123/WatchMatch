@@ -1,20 +1,21 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+
 import { motion } from 'framer-motion'
 import { generateRecommendations } from '@/lib/recommendationEngine'
-import { QuizAnswers, ScoredWatch } from '@/types'
+import { buildSwipePreferences } from '@/lib/preferenceEngine'
+import { QuizAnswers, ScoredWatch, SwipeResult } from '@/types'
 import { ArchetypeCard } from './ArchetypeCard'
 import { WatchCard } from './WatchCard'
 import { CompareDrawer } from './CompareDrawer'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, BarChart2 } from 'lucide-react'
+import { ArrowLeft, BarChart2, Zap } from 'lucide-react'
 import Link from 'next/link'
 
 export function ResultsView() {
   const searchParams = useSearchParams()
-  const router = useRouter()
   const [compareList, setCompareList] = useState<ScoredWatch[]>([])
   const [showCompare, setShowCompare] = useState(false)
 
@@ -23,7 +24,16 @@ export function ResultsView() {
       const data = searchParams.get('data')
       if (!data) return null
       const answers: QuizAnswers = JSON.parse(atob(data))
-      return generateRecommendations(answers)
+
+      // V2: decode swipe data if present
+      const swipeRaw = searchParams.get('swipe')
+      let swipePrefs = undefined
+      if (swipeRaw) {
+        const swipeResults: SwipeResult[] = JSON.parse(atob(swipeRaw))
+        swipePrefs = buildSwipePreferences(swipeResults)
+      }
+
+      return generateRecommendations(answers, swipePrefs)
     } catch {
       return null
     }
@@ -88,7 +98,23 @@ export function ResultsView() {
         {/* Archetype */}
         <ArchetypeCard archetype={result.archetype} />
 
-        {/* Compare hint */}
+        {/* V2: Swipe data indicator */}
+        {result.hasSwipeData && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="flex items-center gap-2.5 px-4 py-3 rounded-xl bg-primary/5 border border-primary/20 mb-6 text-sm"
+          >
+            <Zap className="w-4 h-4 text-primary shrink-0" />
+            <span className="text-muted-foreground">
+              <span className="font-medium text-foreground">Enhanced by your swipe data</span>
+              {' '}— rankings combine your questionnaire answers (60%) and watch reactions (40%)
+            </span>
+          </motion.div>
+        )}
+
+        {/* Section header */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

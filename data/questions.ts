@@ -158,4 +158,103 @@ export const questions: QuizQuestion[] = [
       { value: '5000-plus', label: '£5,000+' },
     ],
   },
+
+  // ── V2 questions ─────────────────────────────────────────────────────────
+
+  {
+    id: 'styleAesthetic',
+    step: 10,
+    title: 'Which aesthetic speaks to you most?',
+    subtitle: 'Pick the vibe that resonates — this fine-tunes the visual direction of your recommendations.',
+    type: 'single',
+    field: 'styleAesthetic',
+    options: [
+      {
+        value: 'quiet-luxury',
+        label: 'Quiet Luxury',
+        description: 'Understated, refined, no logos needed — quality speaks for itself',
+      },
+      {
+        value: 'sporty-tool',
+        label: 'Sporty Tool Watch',
+        description: 'Functional, robust, built for purpose — form follows function',
+      },
+      {
+        value: 'vintage-inspired',
+        label: 'Vintage Inspired',
+        description: 'Patina, character, history — a watch with stories to tell',
+      },
+      {
+        value: 'flashy-statement',
+        label: 'Flashy Statement',
+        description: 'Bold, attention-grabbing, unapologetically luxurious',
+      },
+      {
+        value: 'minimal-clean',
+        label: 'Minimal & Clean',
+        description: 'Less is more — nothing superfluous, nothing out of place',
+      },
+    ],
+  },
+  {
+    id: 'colourPreference',
+    step: 11,
+    title: 'Which dial colours appeal to you?',
+    subtitle: 'Select all that you like — we\'ll weight your recommendations accordingly.',
+    type: 'multi',
+    field: 'colourPreference',
+    options: [
+      { value: 'black', label: 'Black', description: 'Timeless, versatile, authoritative' },
+      { value: 'blue', label: 'Blue', description: 'Classic and instantly recognisable' },
+      { value: 'white', label: 'White / Silver', description: 'Clean, bright, dressy' },
+      { value: 'green', label: 'Green', description: 'On-trend, rich, distinctive' },
+      { value: 'silver', label: 'Grey / Slate', description: 'Subtle, sophisticated' },
+      { value: 'gold', label: 'Champagne / Gold', description: 'Warm, luxurious, dressy' },
+    ],
+  },
+  {
+    id: 'braceletPreference',
+    step: 12,
+    title: 'Any preference on strap material?',
+    subtitle: 'Comfort and style in equal measure.',
+    type: 'single',
+    field: 'braceletPreference',
+    options: [
+      {
+        value: 'leather',
+        label: 'Leather Strap',
+        description: 'Classic, dressy, develops character with wear',
+      },
+      {
+        value: 'steel',
+        label: 'Metal Bracelet',
+        description: 'Integrated, sporty, or dressy depending on the watch',
+      },
+      {
+        value: 'rubber',
+        label: 'Rubber / Fabric',
+        description: 'Casual, sporty, comfortable for active use',
+      },
+      {
+        value: 'no-preference',
+        label: 'No Preference',
+        description: 'I\'m open to whatever suits the watch best',
+      },
+    ],
+  },
+  {
+    id: 'emotionalIntent',
+    step: 13,
+    title: 'How do you want your watch to make you feel?',
+    subtitle: 'Select all that apply — watches carry emotional meaning.',
+    type: 'multi',
+    field: 'emotionalIntent',
+    options: [
+      { value: 'confident', label: 'Confident', description: 'Like I can command any room' },
+      { value: 'understated', label: 'Understated', description: 'Like I know something others don\'t' },
+      { value: 'professional', label: 'Professional', description: 'Polished, credible, authoritative' },
+      { value: 'rugged', label: 'Rugged', description: 'Capable, adventurous, ready for anything' },
+      { value: 'stylish', label: 'Stylish', description: 'Like my taste sets me apart' },
+    ],
+  },
 ]

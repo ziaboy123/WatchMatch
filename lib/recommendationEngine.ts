@@ -5,9 +5,11 @@ import {
   ScoredWatch,
   WatchArchetype,
   RecommendationResult,
+  SwipePreferences,
   BudgetRange,
   WristSize,
 } from '@/types'
+import { scoreWatchBySwipePreferences } from './preferenceEngine'
 
 const BUDGET_RANGES: Record<BudgetRange, [number, number]> = {
   'under-100': [0, 100],
@@ -312,6 +314,84 @@ function scoreWatch(watch: Watch, answers: QuizAnswers): { score: number; reason
     }
   }
 
+  // ── V2: Style aesthetic ────────────────────────────────────────────────────
+  if (answers.styleAesthetic) {
+    const ae = answers.styleAesthetic
+    if (ae === 'quiet-luxury') {
+      if (watch.styleTags.includes('Understated') || watch.styleTags.includes('Old Money') || watch.styleTags.includes('Minimalist')) {
+        score += 12
+        reasons.push('Embodies quiet luxury — refined without shouting')
+      }
+    }
+    if (ae === 'sporty-tool') {
+      if (watch.styleTags.includes('Tool Watch') || watch.styleTags.includes('Sporty') || watch.waterResistanceM >= 200) {
+        score += 12
+        reasons.push('Purpose-built tool watch aesthetic')
+      }
+    }
+    if (ae === 'vintage-inspired') {
+      if (watch.styleTags.includes('Vintage') || watch.category === 'Field') {
+        score += 12
+        reasons.push('Vintage character you\'re drawn to')
+      }
+    }
+    if (ae === 'flashy-statement') {
+      if (watch.styleTags.includes('Bold') || watch.styleTags.includes('Statement Piece') || watch.styleTags.includes('Luxury')) {
+        score += 12
+        reasons.push('Makes the bold statement you\'re after')
+      }
+    }
+    if (ae === 'minimal-clean') {
+      if (watch.styleTags.includes('Minimalist') || watch.styleTags.includes('Classic')) {
+        score += 12
+        reasons.push('Clean, uncluttered design matches your aesthetic')
+      }
+    }
+  }
+
+  // ── V2: Bracelet preference ────────────────────────────────────────────────
+  if (answers.braceletPreference && answers.braceletPreference !== 'no-preference') {
+    const bp = answers.braceletPreference
+    const br = watch.bracelet.toLowerCase()
+    if (bp === 'leather' && br.includes('leather')) {
+      score += 8
+      reasons.push('Leather strap — your preferred wrist feel')
+    }
+    if (bp === 'steel' && (br.includes('steel') || br.includes('integrated') || br.includes('titanium'))) {
+      score += 8
+      reasons.push('Metal bracelet matches your preference')
+    }
+    if (bp === 'rubber' && (br.includes('rubber') || br.includes('resin') || br.includes('fabric') || br.includes('canvas'))) {
+      score += 8
+      reasons.push('Rubber/fabric strap aligns with your preference')
+    }
+  }
+
+  // ── V2: Emotional intent ───────────────────────────────────────────────────
+  if (answers.emotionalIntent && answers.emotionalIntent.length > 0) {
+    const intent = answers.emotionalIntent
+    if (intent.includes('confident') && (watch.styleTags.includes('Bold') || watch.styleTags.includes('Luxury'))) {
+      score += 6
+      reasons.push('Projects the confidence you\'re looking for')
+    }
+    if (intent.includes('understated') && (watch.styleTags.includes('Understated') || watch.styleTags.includes('Minimalist'))) {
+      score += 6
+      reasons.push('Understated elegance you value')
+    }
+    if (intent.includes('professional') && (watch.styleTags.includes('Professional') || watch.styleTags.includes('Classic'))) {
+      score += 6
+      reasons.push('Conveys professionalism')
+    }
+    if (intent.includes('rugged') && (watch.styleTags.includes('Tool Watch') || watch.waterResistanceM >= 200)) {
+      score += 6
+      reasons.push('Rugged enough for your adventurous lifestyle')
+    }
+    if (intent.includes('stylish') && (watch.styleTags.includes('Luxury') || watch.styleTags.includes('Old Money') || watch.styleTags.includes('Bold'))) {
+      score += 6
+      reasons.push('Sets you apart as a style-conscious wearer')
+    }
+  }
+
   return { score, reasons }
 }
 
@@ -356,37 +436,90 @@ function determineArchetype(answers: QuizAnswers): WatchArchetype {
   if (personality === 'Statement Piece') scores['sports-enthusiast'] += 2
   if (env === 'Physical Labour') scores['sports-enthusiast'] += 3
 
+  // V2 style aesthetic signals
+  const ae = answers.styleAesthetic
+  if (ae === 'quiet-luxury') { scores['quiet-luxury'] += 5; scores['modern-professional'] += 2 }
+  if (ae === 'sporty-tool') { scores['sports-enthusiast'] += 5; scores['everyday-explorer'] += 2 }
+  if (ae === 'vintage-inspired') { scores['vintage-collector'] += 6 }
+  if (ae === 'flashy-statement') { scores['quiet-luxury'] -= 2; scores['sports-enthusiast'] += 3; scores['modern-professional'] += 2 }
+  if (ae === 'minimal-clean') { scores['practical-minimalist'] += 5; scores['quiet-luxury'] += 2 }
+
+  // V2 emotional intent
+  const intent = answers.emotionalIntent || []
+  if (intent.includes('confident')) scores['modern-professional'] += 2
+  if (intent.includes('understated')) { scores['quiet-luxury'] += 3; scores['practical-minimalist'] += 2 }
+  if (intent.includes('professional')) scores['modern-professional'] += 3
+  if (intent.includes('rugged')) { scores['sports-enthusiast'] += 3; scores['everyday-explorer'] += 2 }
+  if (intent.includes('stylish')) { scores['quiet-luxury'] += 2; scores['vintage-collector'] += 1 }
+
   const topId = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0]
   return archetypes.find((a) => a.id === topId) || archetypes[0]
 }
 
-export function generateRecommendations(answers: QuizAnswers): RecommendationResult {
+/**
+ * Main recommendation function.
+ * When swipePrefs are provided, final score = 60% quiz + 40% swipe.
+ * Falls back to 100% quiz if no swipe data exists.
+ */
+export function generateRecommendations(
+  answers: QuizAnswers,
+  swipePrefs?: SwipePreferences
+): RecommendationResult {
   const archetype = determineArchetype(answers)
+  const hasSwipeData = !!(swipePrefs && swipePrefs.likedWatchIds.length > 0)
+
+  function computeScore(watch: Watch): { score: number; reasons: string[] } {
+    const { score: qScore, reasons: qReasons } = scoreWatch(watch, answers)
+
+    // Hard exclude: if quiz says over budget, exclude regardless
+    if (qScore === -1) return { score: -1, reasons: [] }
+
+    if (!hasSwipeData || !swipePrefs) {
+      return { score: qScore, reasons: qReasons }
+    }
+
+    const { score: sScore, reasons: sReasons } = scoreWatchBySwipePreferences(watch, swipePrefs)
+
+    // Hard exclude: explicitly disliked in swipe session
+    if (sScore === -1) return { score: -1, reasons: [] }
+
+    // 60% quiz, 40% swipe — normalise each to 0–100 range
+    const normalizedQuiz = Math.min(qScore / 100, 1) * 60
+    const normalizedSwipe = Math.min(sScore / 40, 1) * 40
+    const combined = normalizedQuiz + normalizedSwipe
+
+    // Merge reasons: swipe reasons first (more personal), then quiz reasons
+    const mergedReasons = [...new Set([...sReasons, ...qReasons])].slice(0, 4)
+
+    return { score: combined, reasons: mergedReasons }
+  }
 
   const scored: ScoredWatch[] = watches
     .map((watch) => {
-      const { score, reasons } = scoreWatch(watch, answers)
-      // Deduplicate reasons and take top 3
-      const uniqueReasons = [...new Set(reasons)].slice(0, 3)
-      return { ...watch, score, matchReasons: uniqueReasons }
+      const { score, reasons } = computeScore(watch)
+      return { ...watch, score, matchReasons: [...new Set(reasons)].slice(0, 3) }
     })
     .filter((w) => w.score > 0)
     .sort((a, b) => b.score - a.score)
     .slice(0, 10)
 
-  // If we get fewer than 5 results, loosen budget filter and retry
+  // Fallback: loosen budget if fewer than 5 results
   if (scored.length < 5 && answers.budget) {
     const relaxed: ScoredWatch[] = watches
       .map((watch) => {
-        const { score, reasons } = scoreWatch(watch, { ...answers, budget: undefined })
-        const uniqueReasons = [...new Set(reasons)].slice(0, 3)
-        return { ...watch, score, matchReasons: uniqueReasons }
+        const { score, reasons } = computeScore({ ...watch })
+        // Re-run without budget constraint
+        const { score: qScore2, reasons: qReasons2 } = scoreWatch(watch, { ...answers, budget: undefined })
+        const finalScore = hasSwipeData && swipePrefs
+          ? Math.min(qScore2 / 100, 1) * 60 + Math.min(score / 40, 1) * 40
+          : qScore2
+        return { ...watch, score: finalScore, matchReasons: [...new Set(qReasons2)].slice(0, 3) }
       })
       .filter((w) => w.score > 0)
       .sort((a, b) => b.score - a.score)
       .slice(0, 10)
-    return { archetype, recommendations: relaxed }
+    return { archetype, recommendations: relaxed, hasSwipeData }
   }
 
-  return { archetype, recommendations: scored }
+  return { archetype, recommendations: scored, hasSwipeData }
 }

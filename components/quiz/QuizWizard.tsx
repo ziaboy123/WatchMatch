@@ -52,9 +52,9 @@ export function QuizWizard() {
   }
 
   function submitAnswers() {
-    // Encode answers as base64 query param to avoid URL length issues
     const encoded = btoa(JSON.stringify(answers))
-    router.push(`/results?data=${encoded}`)
+    // V2: go to swipe mode before results
+    router.push(`/swipe?data=${encoded}`)
   }
 
   const variants = {
@@ -124,7 +124,7 @@ export function QuizWizard() {
           >
             {isLastStep ? (
               <>
-                See Results <Check className="w-4 h-4" />
+                Next: Rate Watches <ArrowRight className="w-4 h-4" />
               </>
             ) : (
               <>
