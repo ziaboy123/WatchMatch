@@ -25,11 +25,23 @@ export function WatchCard({ watch, rank, onCompare, isSelectedForCompare }: Watc
     >
       {/* Watch image area */}
       <div className="relative h-52 bg-secondary/40 overflow-hidden">
-        <img
-          src={watch.image}
-          alt={`${watch.brand} ${watch.model}`}
-          className="absolute inset-0 w-full h-full object-contain p-3"
-        />
+        {watch.image ? (
+          <img
+            src={watch.image}
+            alt={`${watch.brand} ${watch.model}`}
+            className="absolute inset-0 w-full h-full object-contain p-3"
+          />
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-muted-foreground/40">
+            <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <circle cx="24" cy="24" r="18" />
+              <circle cx="24" cy="24" r="10" />
+              <line x1="24" y1="24" x2="24" y2="14" />
+              <line x1="24" y1="24" x2="31" y2="24" />
+            </svg>
+            <span className="text-[10px] uppercase tracking-widest">Image unavailable</span>
+          </div>
+        )}
 
         {/* Rank badge */}
         <div className="absolute top-3 left-3 w-7 h-7 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center">
