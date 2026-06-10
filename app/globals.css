@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(220 13% 9%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(220 13% 9%);
+  --color-primary: hsl(220 13% 9%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(220 14% 96%);
+  --color-secondary-foreground: hsl(220 13% 9%);
+  --color-muted: hsl(220 14% 96%);
+  --color-muted-foreground: hsl(220 9% 46%);
+  --color-accent: hsl(220 14% 96%);
+  --color-accent-foreground: hsl(220 13% 9%);
+  --color-border: hsl(220 13% 91%);
+  --color-input: hsl(220 13% 91%);
+  --color-ring: hsl(220 13% 9%);
+  --radius: 0.75rem;
+  --font-sans: var(--font-sans), system-ui, sans-serif;
+  --font-serif: var(--font-serif), Georgia, serif;
+}
+
+/* Dark mode overrides */
+.dark {
+  --color-background: hsl(220 13% 7%);
+  --color-foreground: hsl(220 13% 96%);
+  --color-card: hsl(220 13% 10%);
+  --color-card-foreground: hsl(220 13% 96%);
+  --color-primary: hsl(220 13% 96%);
+  --color-primary-foreground: hsl(220 13% 7%);
+  --color-secondary: hsl(220 13% 14%);
+  --color-secondary-foreground: hsl(220 13% 96%);
+  --color-muted: hsl(220 13% 14%);
+  --color-muted-foreground: hsl(220 9% 60%);
+  --color-accent: hsl(220 13% 14%);
+  --color-accent-foreground: hsl(220 13% 96%);
+  --color-border: hsl(220 13% 18%);
+  --color-input: hsl(220 13% 18%);
+  --color-ring: hsl(220 13% 96%);
+}
+
+/* Base styles */
+*, *::before, *::after {
+  border-color: var(--color-border);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-feature-settings: 'rlig' 1, 'calt' 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+
+.text-balance { text-wrap: balance; }
