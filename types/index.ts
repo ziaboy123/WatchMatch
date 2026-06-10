@@ -3,20 +3,37 @@ export interface Watch {
   brand: string
   model: string
   category: WatchCategory
+  /** Mid-point price used for internal scoring — never shown raw to users */
   price: number
+  /** Human-readable estimated price range, e.g. "£80 – £120" */
+  priceRange: string
   currency: string
   movement: MovementType
   caseSizeMm: number
   waterResistanceM: number
   styleTags: StyleTag[]
+  dialColour: DialColour
   description: string
-  imageUrl: string
+  /** Unsplash image URL */
+  image: string
   bracelet: string
   caseThicknessMm?: number
   lugsWidthMm?: number
   pros: string[]
   bestUseCase: string
 }
+
+export type DialColour =
+  | 'black'
+  | 'blue'
+  | 'white'
+  | 'green'
+  | 'silver'
+  | 'gold'
+  | 'grey'
+  | 'brown'
+  | 'cream'
+  | 'multi'
 
 export type WatchCategory =
   | 'Dive'

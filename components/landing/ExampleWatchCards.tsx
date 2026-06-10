@@ -4,38 +4,35 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { formatPrice } from '@/lib/utils'
+import { formatEstimatedPrice } from '@/lib/utils'
 
 const exampleWatches = [
   {
     brand: 'Tudor',
     model: 'Black Bay 58',
-    price: 2950,
+    priceRange: '£2,600 – £3,300',
     category: 'Dive',
     tags: ['39mm', 'Automatic', '200m WR'],
     description: 'The perfect proportions of vintage Rolex DNA in a modern package.',
-    gradient: 'from-slate-900 to-slate-700',
-    accentColor: 'bg-blue-600',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Tudor_Black_Bay_58_ref._M79018V%2C_primo_modello_di_casa_Tudor_interamente_in_oro.jpg/400px-Tudor_Black_Bay_58_ref._M79018V%2C_primo_modello_di_casa_Tudor_interamente_in_oro.jpg',
   },
   {
     brand: 'Tissot',
     model: 'PRX Powermatic 80',
-    price: 575,
+    priceRange: '£510 – £645',
     category: 'Integrated Sports',
     tags: ['40mm', 'Automatic', 'Sapphire'],
     description: 'The most sought-after integrated bracelet watch under £1,000.',
-    gradient: 'from-stone-900 to-stone-700',
-    accentColor: 'bg-stone-400',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Tissot_watch_PRX_collection_23_January_2025_Philippines1.jpg/400px-Tissot_watch_PRX_collection_23_January_2025_Philippines1.jpg',
   },
   {
     brand: 'Seiko',
     model: 'Presage Cocktail Time',
-    price: 320,
+    priceRange: '£285 – £360',
     category: 'Dress',
     tags: ['40mm', 'Automatic', 'In-House'],
     description: 'Stunning enamel-like dial that punches above its price class.',
-    gradient: 'from-zinc-900 to-zinc-700',
-    accentColor: 'bg-amber-500',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Seiko_SARB.jpg/400px-Seiko_SARB.jpg',
   },
 ]
 
@@ -67,15 +64,15 @@ export function ExampleWatchCards() {
               transition={{ duration: 0.5, delay: i * 0.12 }}
               className="group rounded-2xl border bg-card overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
             >
-              {/* Watch image placeholder */}
-              <div className={`h-48 bg-gradient-to-br ${watch.gradient} relative flex items-center justify-center`}>
-                <div className="w-28 h-28 rounded-full border-4 border-white/10 flex items-center justify-center">
-                  <div className="w-20 h-20 rounded-full border-2 border-white/20 flex items-center justify-center">
-                    <div className={`w-3 h-3 rounded-full ${watch.accentColor}`} />
-                  </div>
-                </div>
+              {/* Watch image */}
+              <div className="h-48 bg-secondary/40 relative overflow-hidden">
+                <img
+                  src={watch.image}
+                  alt={`${watch.brand} ${watch.model}`}
+                  className="absolute inset-0 w-full h-full object-contain p-3"
+                />
                 <div className="absolute top-3 right-3">
-                  <span className="text-xs text-white/60 bg-white/10 px-2 py-1 rounded-full">
+                  <span className="text-xs text-foreground/70 bg-background/70 backdrop-blur-sm px-2 py-1 rounded-full">
                     {watch.category}
                   </span>
                 </div>
@@ -99,7 +96,7 @@ export function ExampleWatchCards() {
                     </span>
                   ))}
                 </div>
-                <p className="font-semibold text-lg">{formatPrice(watch.price)}</p>
+                <p className="font-semibold text-lg">{formatEstimatedPrice(watch.priceRange)}</p>
               </div>
             </motion.div>
           ))}
