@@ -46,6 +46,7 @@ export type StyleTag =
   | 'Streetwear'
   | 'Professional'
   | 'Statement Piece'
+  | 'Rugged'
 
 export interface QuizAnswers {
   age?: number
@@ -57,6 +58,11 @@ export interface QuizAnswers {
   usage?: UsageContext[]
   movementPreference?: MovementPreference
   budget?: BudgetRange
+  // V2 additions
+  styleAesthetic?: StyleAesthetic
+  colourPreference?: ColourPreference[]
+  braceletPreference?: BraceletPreference
+  emotionalIntent?: EmotionalIntent[]
 }
 
 export type WristSize =
@@ -124,6 +130,59 @@ export type BudgetRange =
   | '2500-5000'
   | '5000-plus'
 
+// ── V2 quiz types ──────────────────────────────────────────────────────────
+
+export type StyleAesthetic =
+  | 'quiet-luxury'
+  | 'sporty-tool'
+  | 'vintage-inspired'
+  | 'flashy-statement'
+  | 'minimal-clean'
+
+export type ColourPreference =
+  | 'black'
+  | 'blue'
+  | 'white'
+  | 'green'
+  | 'silver'
+  | 'gold'
+
+export type BraceletPreference =
+  | 'leather'
+  | 'steel'
+  | 'rubber'
+  | 'no-preference'
+
+export type EmotionalIntent =
+  | 'confident'
+  | 'understated'
+  | 'professional'
+  | 'rugged'
+  | 'stylish'
+
+// ── Swipe / Discovery mode types ───────────────────────────────────────────────
+
+export type SwipeDecision = 'like' | 'dislike' | 'maybe'
+
+export interface SwipeResult {
+  watchId: string
+  decision: SwipeDecision
+}
+
+export interface SwipePreferences {
+  likedBrands: Record<string, number>        // brand → weight
+  likedCategories: Record<string, number>    // category → weight
+  likedStyleTags: Record<string, number>     // tag → weight
+  likedMovements: Record<string, number>     // movement → weight
+  likedCaseSizes: number[]                   // raw liked case sizes
+  preferredPriceRange: [number, number]      // inferred from likes
+  likedWatchIds: string[]
+  dislikedWatchIds: string[]
+  maybeWatchIds: string[]
+}
+
+// ── Updated recommendation result ──────────────────────────────────────────
+
 export interface WatchArchetype {
   id: string
   title: string
@@ -142,4 +201,5 @@ export interface ScoredWatch extends Watch {
 export interface RecommendationResult {
   archetype: WatchArchetype
   recommendations: ScoredWatch[]
+  hasSwipeData: boolean
 }
