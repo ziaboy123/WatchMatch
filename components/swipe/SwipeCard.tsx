@@ -61,11 +61,23 @@ export function SwipeCard({ watch, onSwipe, isTop }: SwipeCardProps) {
 
         {/* Watch image */}
         <div className="flex-1 bg-secondary/40 min-h-0 relative overflow-hidden">
-          <img
-            src={watch.image}
-            alt={`${watch.brand} ${watch.model}`}
-            className="absolute inset-0 w-full h-full object-contain p-6"
-          />
+          {watch.image ? (
+            <img
+              src={watch.image}
+              alt={`${watch.brand} ${watch.model}`}
+              className="absolute inset-0 w-full h-full object-contain p-6"
+            />
+          ) : (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-muted-foreground/40">
+              <svg viewBox="0 0 48 48" className="w-14 h-14" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <circle cx="24" cy="24" r="18" />
+                <circle cx="24" cy="24" r="10" />
+                <line x1="24" y1="24" x2="24" y2="14" />
+                <line x1="24" y1="24" x2="31" y2="24" />
+              </svg>
+              <span className="text-[10px] uppercase tracking-widest">Image unavailable</span>
+            </div>
+          )}
         </div>
 
         {/* Info section */}
