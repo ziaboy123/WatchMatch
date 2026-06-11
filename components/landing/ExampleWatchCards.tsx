@@ -15,7 +15,7 @@ const exampleWatches = [
     category: 'Dive',
     tags: ['39mm', 'Automatic', '200m WR'],
     description: 'The perfect proportions of vintage Rolex DNA in a modern package.',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Tudor_Black_Bay_58_ref._M79018V%2C_primo_modello_di_casa_Tudor_interamente_in_oro.jpg/400px-Tudor_Black_Bay_58_ref._M79018V%2C_primo_modello_di_casa_Tudor_interamente_in_oro.jpg',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Tudor_Black_Bay_58_ref._M79018V%2C_primo_modello_di_casa_Tudor_interamente_in_oro.jpg/500px-Tudor_Black_Bay_58_ref._M79018V%2C_primo_modello_di_casa_Tudor_interamente_in_oro.jpg',
   },
   {
     brand: 'Tissot',
@@ -24,7 +24,7 @@ const exampleWatches = [
     category: 'Integrated Sports',
     tags: ['40mm', 'Automatic', 'Sapphire'],
     description: 'The most sought-after integrated bracelet watch under £1,000.',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Tissot_watch_PRX_collection_23_January_2025_Philippines1.jpg/400px-Tissot_watch_PRX_collection_23_January_2025_Philippines1.jpg',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Tissot_watch_PRX_collection_23_January_2025_Philippines1.jpg/500px-Tissot_watch_PRX_collection_23_January_2025_Philippines1.jpg',
   },
   {
     brand: 'Seiko',
@@ -33,7 +33,7 @@ const exampleWatches = [
     category: 'Dress',
     tags: ['40mm', 'Automatic', 'In-House'],
     description: 'Stunning enamel-like dial that punches above its price class.',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Seiko_SARB.jpg/400px-Seiko_SARB.jpg',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Seiko_SARB.jpg/500px-Seiko_SARB.jpg',
   },
 ]
 
