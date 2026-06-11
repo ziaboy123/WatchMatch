@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { WatchCategory } from '@/types'
 import { WatchPlaceholder } from './WatchPlaceholder'
 
@@ -28,6 +28,14 @@ export function WatchImage({
 }: WatchImageProps) {
   const [loaded, setLoaded] = useState(false)
   const [failed, setFailed] = useState(false)
+  const imgRef = useRef<HTMLImageElement>(null)
+
+  // If the browser served the image from cache before onLoad was registered
+  useEffect(() => {
+    if (imgRef.current?.complete && imgRef.current.naturalWidth > 0) {
+      setLoaded(true)
+    }
+  }, [src])
 
   const watch = { brand, model, category: category as WatchCategory }
   const hasUrl = Boolean(src && src.trim())
@@ -40,6 +48,7 @@ export function WatchImage({
 
       {showImg && (
         <img
+          ref={imgRef}
           src={proxyUrl(src)}
           alt={`${brand} ${model}`}
           className={className}
