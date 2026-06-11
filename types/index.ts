@@ -177,7 +177,7 @@ export type EmotionalIntent =
   | 'rugged'
   | 'stylish'
 
-// ── Swipe / Discovery mode types ───────────────────────────────────────────────
+// ── Swipe / Discovery mode types ────────────────────────────────────────────
 
 export type SwipeDecision = 'like' | 'dislike' | 'maybe'
 
