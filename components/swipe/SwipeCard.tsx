@@ -4,6 +4,7 @@ import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion'
 import { Watch, SwipeDecision } from '@/types'
 import { formatEstimatedPrice } from '@/lib/utils'
 import { Droplets, Zap, Maximize2, ThumbsUp, ThumbsDown, Minus } from 'lucide-react'
+import { WatchPlaceholder } from '@/components/ui/WatchPlaceholder'
 
 interface SwipeCardProps {
   watch: Watch
@@ -68,15 +69,7 @@ export function SwipeCard({ watch, onSwipe, isTop }: SwipeCardProps) {
               className="absolute inset-0 w-full h-full object-contain p-6"
             />
           ) : (
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-muted-foreground/40">
-              <svg viewBox="0 0 48 48" className="w-14 h-14" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <circle cx="24" cy="24" r="18" />
-                <circle cx="24" cy="24" r="10" />
-                <line x1="24" y1="24" x2="24" y2="14" />
-                <line x1="24" y1="24" x2="31" y2="24" />
-              </svg>
-              <span className="text-[10px] uppercase tracking-widest">Image unavailable</span>
-            </div>
+            <WatchPlaceholder watch={watch} size="swipe" />
           )}
         </div>
 

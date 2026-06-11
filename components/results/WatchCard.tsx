@@ -5,6 +5,7 @@ import { ScoredWatch } from '@/types'
 import { formatEstimatedPrice } from '@/lib/utils'
 import { Droplets, Zap, Maximize2, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { WatchPlaceholder } from '@/components/ui/WatchPlaceholder'
 
 interface WatchCardProps {
   watch: ScoredWatch
@@ -32,15 +33,7 @@ export function WatchCard({ watch, rank, onCompare, isSelectedForCompare }: Watc
             className="absolute inset-0 w-full h-full object-contain p-3"
           />
         ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-muted-foreground/40">
-            <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <circle cx="24" cy="24" r="18" />
-              <circle cx="24" cy="24" r="10" />
-              <line x1="24" y1="24" x2="24" y2="14" />
-              <line x1="24" y1="24" x2="31" y2="24" />
-            </svg>
-            <span className="text-[10px] uppercase tracking-widest">Image unavailable</span>
-          </div>
+          <WatchPlaceholder watch={watch} size="card" />
         )}
 
         {/* Rank badge */}
