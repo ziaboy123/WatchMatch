@@ -325,23 +325,35 @@ function AnchorMotif({ color }: { color: string }) {
   )
 }
 
+// Precomputed hour-marker endpoints (no runtime trig → no hydration float mismatch)
+// Each entry: [x1, y1, x2, y2, isCardinal] for deg = 0,30,60,...,330
+// r1=17 (outer), r2cardinal=13, r2minor=15, center=32
+const HOUR_MARKERS: [number, number, number, number, boolean][] = [
+  [32,    15,    32,    19,    true ],  //   0° (12 o'clock)
+  [40.5,  17.28, 39.17, 19.01, false], //  30°
+  [46.72, 23.5,  44.99, 24.83, false], //  60°
+  [49,    32,    45,    32,    true ],  //  90° (3 o'clock)
+  [46.72, 40.5,  44.99, 39.17, false], // 120°
+  [40.5,  46.72, 39.17, 44.99, false], // 150°
+  [32,    49,    32,    45,    true ],  // 180° (6 o'clock)
+  [23.5,  46.72, 24.83, 44.99, false], // 210°
+  [17.28, 40.5,  19.01, 39.17, false], // 240°
+  [15,    32,    19,    32,    true ],  // 270° (9 o'clock)
+  [17.28, 23.5,  19.01, 24.83, false], // 300°
+  [23.5,  17.28, 24.83, 19.01, false], // 330°
+]
+
 function DialMotif({ color }: { color: string }) {
   return (
     <svg viewBox="0 0 64 64" className="w-full h-full" fill="none">
       <circle cx="32" cy="32" r="20" stroke={color} strokeWidth="1.5" />
-      {/* Hour markers */}
-      {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => {
-        const rad = (deg - 90) * Math.PI / 180
-        const r1 = 17, r2 = deg % 90 === 0 ? 13 : 15
-        return (
-          <line
-            key={deg}
-            x1={32 + r1 * Math.cos(rad)} y1={32 + r1 * Math.sin(rad)}
-            x2={32 + r2 * Math.cos(rad)} y2={32 + r2 * Math.sin(rad)}
-            stroke={color} strokeWidth={deg % 90 === 0 ? 2 : 1} strokeLinecap="round"
-          />
-        )
-      })}
+      {HOUR_MARKERS.map(([x1, y1, x2, y2, cardinal], i) => (
+        <line
+          key={i}
+          x1={x1} y1={y1} x2={x2} y2={y2}
+          stroke={color} strokeWidth={cardinal ? 2 : 1} strokeLinecap="round"
+        />
+      ))}
       {/* Hands at 10:10 */}
       <line x1="32" y1="32" x2="24" y2="20" stroke={color} strokeWidth="2" strokeLinecap="round" />
       <line x1="32" y1="32" x2="40" y2="22" stroke={color} strokeWidth="2" strokeLinecap="round" />
