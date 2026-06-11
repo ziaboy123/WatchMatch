@@ -4,7 +4,7 @@ import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion'
 import { Watch, SwipeDecision } from '@/types'
 import { formatEstimatedPrice } from '@/lib/utils'
 import { Droplets, Zap, Maximize2, ThumbsUp, ThumbsDown, Minus } from 'lucide-react'
-import { WatchPlaceholder } from '@/components/ui/WatchPlaceholder'
+import { WatchImage } from '@/components/ui/WatchImage'
 
 interface SwipeCardProps {
   watch: Watch
@@ -62,15 +62,14 @@ export function SwipeCard({ watch, onSwipe, isTop }: SwipeCardProps) {
 
         {/* Watch image */}
         <div className="flex-1 bg-secondary/40 min-h-0 relative overflow-hidden">
-          {watch.image ? (
-            <img
-              src={watch.image}
-              alt={`${watch.brand} ${watch.model}`}
-              className="absolute inset-0 w-full h-full object-contain p-6"
-            />
-          ) : (
-            <WatchPlaceholder watch={watch} size="swipe" />
-          )}
+          <WatchImage
+            src={watch.image}
+            brand={watch.brand}
+            model={watch.model}
+            category={watch.category}
+            size="swipe"
+            className="absolute inset-0 w-full h-full object-contain p-6"
+          />
         </div>
 
         {/* Info section */}

@@ -25,6 +25,54 @@ type BrandTheme = {
 }
 
 const BRAND_THEMES: Record<string, BrandTheme> = {
+  'Seiko': {
+    bg: 'bg-[#080c10]',
+    accent: '#c8a020',
+    accentBg: 'bg-[#c8a020]/10',
+    textPrimary: 'text-[#d8b030]',
+    textSecondary: 'text-[#908060]',
+    motif: 'dial',
+  },
+  'Audemars Piguet': {
+    bg: 'bg-[#0a100e]',
+    accent: '#7ec8a0',
+    accentBg: 'bg-[#7ec8a0]/10',
+    textPrimary: 'text-[#90d8b0]',
+    textSecondary: 'text-[#709888]',
+    motif: 'dial',
+  },
+  'Patek Philippe': {
+    bg: 'bg-[#100e08]',
+    accent: '#d4af60',
+    accentBg: 'bg-[#d4af60]/10',
+    textPrimary: 'text-[#e0c070]',
+    textSecondary: 'text-[#a09060]',
+    motif: 'dial',
+  },
+  'TAG Heuer': {
+    bg: 'bg-[#0a0a0c]',
+    accent: '#c82828',
+    accentBg: 'bg-[#c82828]/10',
+    textPrimary: 'text-[#e03030]',
+    textSecondary: 'text-[#a07070]',
+    motif: 'compass',
+  },
+  'Breitling': {
+    bg: 'bg-[#08080e]',
+    accent: '#f0c040',
+    accentBg: 'bg-[#f0c040]/10',
+    textPrimary: 'text-[#f8d050]',
+    textSecondary: 'text-[#908050]',
+    motif: 'wing',
+  },
+  'Swatch': {
+    bg: 'bg-[#0c0808]',
+    accent: '#e05020',
+    accentBg: 'bg-[#e05020]/10',
+    textPrimary: 'text-[#f06030]',
+    textSecondary: 'text-[#a07060]',
+    motif: 'dial',
+  },
   'Rolex': {
     bg: 'bg-[#0a1a0f]',
     accent: '#00a550',
