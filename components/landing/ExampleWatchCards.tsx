@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { formatEstimatedPrice } from '@/lib/utils'
+import { WatchImage } from '@/components/ui/WatchImage'
 
 const exampleWatches = [
   {
@@ -66,12 +67,14 @@ export function ExampleWatchCards() {
             >
               {/* Watch image */}
               <div className="h-48 bg-secondary/40 relative overflow-hidden">
-                <img
+                <WatchImage
                   src={watch.image}
-                  alt={`${watch.brand} ${watch.model}`}
-                  className="absolute inset-0 w-full h-full object-contain p-3"
+                  brand={watch.brand}
+                  model={watch.model}
+                  category={watch.category}
+                  size="card"
                 />
-                <div className="absolute top-3 right-3">
+                <div className="absolute top-3 right-3 z-10">
                   <span className="text-xs text-foreground/70 bg-background/70 backdrop-blur-sm px-2 py-1 rounded-full">
                     {watch.category}
                   </span>
