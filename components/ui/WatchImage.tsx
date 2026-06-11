@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import type { WatchCategory } from '@/types'
 import { WatchPlaceholder } from './WatchPlaceholder'
 
 interface WatchImageProps {
@@ -13,10 +14,17 @@ interface WatchImageProps {
 }
 
 /**
- * Resilient watch image that falls back to a branded placeholder if
- * the URL is empty or the image fails to load (network error, ORB block,
- * CDN 4xx, etc.). Uses crossOrigin="anonymous" so CORS-enabled hosts like
- * Wikimedia Commons are fetched in cors mode, bypassing Chrome's ORB check.
+ * Resilient watch image with placeholder-first rendering.
+ *
+ * Strategy:
+ *  1. Placeholder renders immediately — no blank gap, no broken-icon state ever.
+ *  2. <img> loads silently in the background (display:none).
+ *  3. On successful load  → image fades in, placeholder unmounts.
+ *  4. On any failure      → placeholder stays, img removed from DOM.
+ *
+ * crossOrigin="anonymous" puts the request in CORS mode so Wikimedia's
+ * Access-Control-Allow-Origin:* header is honoured and Chrome ORB does not
+ * apply. referrerPolicy="no-referrer" avoids CDN hotlink blocks.
  */
 export function WatchImage({
   src,
@@ -26,22 +34,32 @@ export function WatchImage({
   size = 'card',
   className = 'absolute inset-0 w-full h-full object-contain p-3',
 }: WatchImageProps) {
+  const [loaded, setLoaded] = useState(false)
   const [failed, setFailed] = useState(false)
 
-  const watch = { brand, model, category: category as import('@/types').WatchCategory }
+  const watch = { brand, model, category: category as WatchCategory }
 
-  if (!src || failed) {
-    return <WatchPlaceholder watch={watch} size={size} />
-  }
+  // No URL or already confirmed failed → placeholder only
+  const hasUrl = Boolean(src && src.trim())
+  const showPlaceholder = !hasUrl || failed || !loaded
+  const showImg = hasUrl && !failed
 
   return (
-    <img
-      src={src}
-      alt={`${brand} ${model}`}
-      className={className}
-      crossOrigin="anonymous"
-      referrerPolicy="no-referrer"
-      onError={() => setFailed(true)}
-    />
+    <>
+      {showPlaceholder && <WatchPlaceholder watch={watch} size={size} />}
+
+      {showImg && (
+        <img
+          src={src}
+          alt={`${brand} ${model}`}
+          className={className}
+          style={loaded ? undefined : { display: 'none' }}
+          crossOrigin="anonymous"
+          referrerPolicy="no-referrer"
+          onLoad={() => setLoaded(true)}
+          onError={() => setFailed(true)}
+        />
+      )}
+    </>
   )
 }
