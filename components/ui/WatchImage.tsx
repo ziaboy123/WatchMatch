@@ -15,7 +15,7 @@ interface WatchImageProps {
 
 function proxyUrl(src: string): string {
   if (!src) return ''
-  return `/api/img?url=${encodeURIComponent(src)}`
+  return `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/api/img?url=${encodeURIComponent(src)}`
 }
 
 export function WatchImage({
