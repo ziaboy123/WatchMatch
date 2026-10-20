@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { formatEstimatedPrice } from '@/lib/utils'
 import { WatchImage } from '@/components/ui/WatchImage'
 
+// Photos here must be ones from data/watches.ts, since /api/img only serves the photos listed there
 const exampleWatches = [
   {
     brand: 'Tudor',
