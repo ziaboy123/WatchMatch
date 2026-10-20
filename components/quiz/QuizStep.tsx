@@ -4,6 +4,14 @@ import { QuizQuestion } from '@/data/questions'
 import { cn } from '@/lib/utils'
 import { Check } from 'lucide-react'
 
+// True when a number answer is filled in and sits inside the question's min/max
+export function isNumberInRange(question: QuizQuestion, value: unknown): boolean {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return false
+  if (question.min !== undefined && value < question.min) return false
+  if (question.max !== undefined && value > question.max) return false
+  return true
+}
+
 interface QuizStepProps {
   question: QuizQuestion
   value: unknown
@@ -19,11 +27,17 @@ export function QuizStep({ question, value, onChange }: QuizStepProps) {
     onChange(next)
   }
 
+  const titleId = `quiz-q-${question.id}`
+  const hintId = `${titleId}-hint`
+  // Only nag once they've typed something, not on an empty box
+  const outOfRange =
+    question.type === 'number' && value !== undefined && !isNumberInRange(question, value)
+
   return (
     <div>
       {/* Question header */}
       <div className="mb-8">
-        <h2 className="font-serif text-2xl md:text-3xl font-bold mb-3 leading-snug">
+        <h2 id={titleId} className="font-serif text-2xl md:text-3xl font-bold mb-3 leading-snug">
           {question.title}
         </h2>
         {question.subtitle && (
@@ -41,10 +55,23 @@ export function QuizStep({ question, value, onChange }: QuizStepProps) {
             placeholder={question.placeholder}
             value={(value as number) ?? ''}
             onChange={(e) => onChange(e.target.value ? Number(e.target.value) : undefined)}
-            className="w-full h-14 px-5 rounded-xl border bg-card text-lg focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+            // The question heading is the label, so screen readers read it out
+            aria-labelledby={titleId}
+            aria-describedby={question.min && question.max ? hintId : undefined}
+            aria-invalid={outOfRange || undefined}
+            className={cn(
+              'w-full h-14 px-5 rounded-xl border bg-card text-lg focus:outline-none focus:ring-2 focus:ring-ring transition-all',
+              outOfRange && 'border-red-500 focus:ring-red-500'
+            )}
           />
           {question.min && question.max && (
-            <p className="mt-2 text-xs text-muted-foreground">
+            <p
+              id={hintId}
+              className={cn(
+                'mt-2 text-xs',
+                outOfRange ? 'text-red-600 font-medium' : 'text-muted-foreground'
+              )}
+            >
               Please enter a value between {question.min} and {question.max}
             </p>
           )}
@@ -60,12 +87,13 @@ export function QuizStep({ question, value, onChange }: QuizStepProps) {
               <button
                 key={opt.value}
                 onClick={() => onChange(opt.value)}
+                aria-pressed={selected}
+                // Hover only on unpicked ones, otherwise the light hover bg wipes out the white text on the picked one
                 className={cn(
                   'w-full text-left px-5 py-4 rounded-xl border transition-all duration-200',
-                  'hover:border-primary/50 hover:bg-secondary/60',
                   selected
                     ? 'border-primary bg-primary text-primary-foreground shadow-sm'
-                    : 'border-border bg-card'
+                    : 'border-border bg-card hover:border-primary/50 hover:bg-secondary/60'
                 )}
               >
                 <div className="flex items-center justify-between gap-3">
@@ -105,6 +133,7 @@ export function QuizStep({ question, value, onChange }: QuizStepProps) {
                 <button
                   key={opt.value}
                   onClick={() => toggleMulti(opt.value)}
+                  aria-pressed={selected}
                   className={cn(
                     'px-4 py-2.5 rounded-xl border text-sm font-medium transition-all duration-200',
                     selected

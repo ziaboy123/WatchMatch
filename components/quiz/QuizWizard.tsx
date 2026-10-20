@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion } from 'framer-motion'
 import { questions } from '@/data/questions'
 import { QuizAnswers } from '@/types'
-import { QuizStep } from './QuizStep'
+import { QuizStep, isNumberInRange } from './QuizStep'
 import { Progress } from '@/components/ui/progress'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
@@ -30,7 +30,8 @@ export function QuizWizard() {
   function canProceed(): boolean {
     const q = currentQuestion
     const val = answers[q.field as keyof QuizAnswers]
-    if (q.type === 'number') return val !== undefined && val !== null && String(val).length > 0
+    // Has to be inside the min/max we tell them about, not just any number
+    if (q.type === 'number') return isNumberInRange(q, val)
     if (q.type === 'multi') return Array.isArray(val) && val.length > 0
     return val !== undefined && val !== null
   }
