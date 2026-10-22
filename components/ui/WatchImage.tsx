@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import type { WatchCategory } from '@/types'
+import { imageCredits } from '@/data/imageCredits'
 import { WatchPlaceholder } from './WatchPlaceholder'
 
 interface WatchImageProps {
@@ -41,6 +42,7 @@ export function WatchImage({
   const hasUrl = Boolean(src && src.trim())
   const showPlaceholder = !hasUrl || failed || !loaded
   const showImg = hasUrl && !failed
+  const credit = src ? imageCredits[src] : undefined
 
   return (
     <>
@@ -56,6 +58,18 @@ export function WatchImage({
           onLoad={() => setLoaded(true)}
           onError={() => setFailed(true)}
         />
+      )}
+
+      {loaded && credit && (
+        <a
+          href={credit.sourceUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute bottom-1 right-1 z-10 text-[10px] leading-tight text-foreground/40 hover:text-foreground/70 transition-colors bg-background/60 backdrop-blur-sm px-1.5 py-0.5 rounded"
+          onClick={e => e.stopPropagation()}
+        >
+          © {credit.author.split(' ').slice(0, 2).join(' ')}
+        </a>
       )}
     </>
   )

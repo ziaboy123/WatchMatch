@@ -54,8 +54,7 @@ export function QuizWizard() {
 
   function submitAnswers() {
     const encoded = btoa(JSON.stringify(answers))
-    // V2: go to swipe mode before results
-    router.push(`/swipe?data=${encoded}`)
+    router.push(`/swipe#data=${encodeURIComponent(encoded)}`)
   }
 
   const variants = {

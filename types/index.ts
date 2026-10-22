@@ -1,3 +1,10 @@
+export interface ImageCredit {
+  author: string
+  licence: string
+  licenceUrl: string
+  sourceUrl: string
+}
+
 export interface Watch {
   id: string
   brand: string
@@ -14,7 +21,6 @@ export interface Watch {
   styleTags: StyleTag[]
   dialColour: DialColour
   description: string
-  /** Unsplash image URL */
   image: string
   bracelet: string
   caseThicknessMm?: number

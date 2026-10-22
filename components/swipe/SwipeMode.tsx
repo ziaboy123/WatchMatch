@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
+import { parseHashParams } from '@/lib/hashParams'
 import { AnimatePresence, motion } from 'framer-motion'
 import { watches as allWatches } from '@/data/watches'
 import { SwipeResult, SwipeDecision, QuizAnswers } from '@/types'
@@ -54,13 +55,26 @@ function selectSwipePool(quizData?: QuizAnswers): typeof allWatches {
 export function SwipeMode() {
   const searchParams = useSearchParams()
   const router = useRouter()
+  const [quizEncoded, setQuizEncoded] = useState('')
+
+  // Read quiz data from hash; if old ?data= link, migrate it to the fragment once
+  useEffect(() => {
+    const legacy = searchParams.get('data')
+    if (legacy) {
+      const newHash = `#data=${encodeURIComponent(legacy)}`
+      window.history.replaceState(null, '', window.location.pathname + newHash)
+      setQuizEncoded(legacy)
+    } else {
+      const hash = parseHashParams(window.location.hash)
+      setQuizEncoded(hash.data ?? '')
+    }
+  }, [searchParams])
 
   const quizData = useMemo((): QuizAnswers | undefined => {
     try {
-      const d = searchParams.get('data')
-      return d ? JSON.parse(atob(d)) : undefined
+      return quizEncoded ? JSON.parse(atob(quizEncoded)) : undefined
     } catch { return undefined }
-  }, [searchParams])
+  }, [quizEncoded])
 
   const swipePool = useMemo(() => selectSwipePool(quizData), [quizData])
 
@@ -85,14 +99,16 @@ export function SwipeMode() {
   }, [isAnimating, currentIndex, swipePool])
 
   function goToResults() {
-    const quizEncoded = searchParams.get('data') || ''
     const swipeEncoded = btoa(JSON.stringify(swipes))
-    router.push(`/results?data=${quizEncoded}&swipe=${swipeEncoded}`)
+    const hashStr = quizEncoded
+      ? `#data=${encodeURIComponent(quizEncoded)}&swipe=${encodeURIComponent(swipeEncoded)}`
+      : `#swipe=${encodeURIComponent(swipeEncoded)}`
+    router.push(`/results${hashStr}`)
   }
 
   function skipToResults() {
-    const quizEncoded = searchParams.get('data') || ''
-    router.push(`/results?data=${quizEncoded}`)
+    const hashStr = quizEncoded ? `#data=${encodeURIComponent(quizEncoded)}` : ''
+    router.push(`/results${hashStr}`)
   }
 
   const likedCount = swipes.filter((s) => s.decision === 'like').length

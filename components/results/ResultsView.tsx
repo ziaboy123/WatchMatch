@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { parseHashParams } from '@/lib/hashParams'
 
 import { motion } from 'framer-motion'
 import { generateRecommendations } from '@/lib/recommendationEngine'
@@ -18,16 +19,32 @@ export function ResultsView() {
   const searchParams = useSearchParams()
   const [compareList, setCompareList] = useState<ScoredWatch[]>([])
   const [showCompare, setShowCompare] = useState(false)
+  const [params, setParams] = useState<Record<string, string>>({})
+
+  // Read from hash; if old ?data=/?swipe= links arrive, migrate them once
+  useEffect(() => {
+    const legacyData = searchParams.get('data')
+    const legacySwipe = searchParams.get('swipe')
+    if (legacyData || legacySwipe) {
+      const parts: string[] = []
+      if (legacyData) parts.push(`data=${encodeURIComponent(legacyData)}`)
+      if (legacySwipe) parts.push(`swipe=${encodeURIComponent(legacySwipe)}`)
+      const newHash = '#' + parts.join('&')
+      window.history.replaceState(null, '', window.location.pathname + newHash)
+      setParams({ data: legacyData ?? '', swipe: legacySwipe ?? '' })
+    } else {
+      setParams(parseHashParams(window.location.hash))
+    }
+  }, [searchParams])
 
   const result = useMemo(() => {
     try {
-      const data = searchParams.get('data')
+      const data = params.data
       if (!data) return null
       const answers: QuizAnswers = JSON.parse(atob(data))
 
-      // V2: decode swipe data if present
-      const swipeRaw = searchParams.get('swipe')
       let swipePrefs = undefined
+      const swipeRaw = params.swipe
       if (swipeRaw) {
         const swipeResults: SwipeResult[] = JSON.parse(atob(swipeRaw))
         swipePrefs = buildSwipePreferences(swipeResults)
@@ -37,7 +54,7 @@ export function ResultsView() {
     } catch {
       return null
     }
-  }, [searchParams])
+  }, [params])
 
   if (!result) {
     return (
