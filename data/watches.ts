@@ -1776,7 +1776,8 @@ export const watches: Watch[] = [
     styleTags: ['Classic', 'Vintage', 'Minimalist', 'Understated'],
     dialColour: 'black',
     description: 'A perfectly proportioned 31mm Black Bay that works brilliantly as a slim everyday dresser for smaller wrists.',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Tudor_Black_Bay_58_ref._M79018V%2C_primo_modello_di_casa_Tudor_interamente_in_oro.jpg/500px-Tudor_Black_Bay_58_ref._M79018V%2C_primo_modello_di_casa_Tudor_interamente_in_oro.jpg',
+    // no CC-licensed photo of this model on Commons yet (it was showing a gold Black Bay 58)
+    image: '',
     bracelet: 'Leather Strap',
     pros: ['Compact 31mm', 'Versatile dressy-sporty', 'Tudor quality', 'In-house movement'],
     bestUseCase: 'Daily wear, office, smart casual — smaller wrists',
@@ -1795,7 +1796,8 @@ export const watches: Watch[] = [
     styleTags: ['Classic', 'Sporty', 'Professional', 'Vintage'],
     dialColour: 'black',
     description: 'The big brother to the BB58. Full 41mm with the same vintage DNA and in-house movement.',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Tudor_Black_Bay_58_ref._M79018V%2C_primo_modello_di_casa_Tudor_interamente_in_oro.jpg/500px-Tudor_Black_Bay_58_ref._M79018V%2C_primo_modello_di_casa_Tudor_interamente_in_oro.jpg',
+    // no CC-licensed photo of this model on Commons yet (it was showing a gold Black Bay 58)
+    image: '',
     bracelet: 'Stainless Steel',
     pros: ['41mm authority', 'In-house movement', 'Versatile', '200m WR'],
     bestUseCase: 'Daily wear, casual, collecting',
