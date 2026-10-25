@@ -62,7 +62,7 @@ export const imageCredits: Record<string, ImageCredit> = {
     sourceUrl: "https://commons.wikimedia.org/wiki/File:ORIENT_New_Mako_Automatic_200M_Diver's_CEM75001B._(5921299415).jpg",
   },
   "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Tissot_watch_PRX_collection_23_January_2025_Philippines1.jpg/500px-Tissot_watch_PRX_collection_23_January_2025_Philippines1.jpg": {
-    author: "Unknown",
+    author: "Valenzuela400",
     licence: "CC BY-SA 4.0",
     licenceUrl: "https://creativecommons.org/licenses/by-sa/4.0",
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Tissot_watch_PRX_collection_23_January_2025_Philippines1.jpg",
@@ -248,7 +248,7 @@ export const imageCredits: Record<string, ImageCredit> = {
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Citizen_quartz_chronograph_watch_with_Eco-Drive_and_tachymeter_scale_bezel.jpg",
   },
   "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Tissot_watch_PRX_collection_23_January_2025_Philippines_black2.jpg/500px-Tissot_watch_PRX_collection_23_January_2025_Philippines_black2.jpg": {
-    author: "Unknown",
+    author: "Valenzuela400",
     licence: "CC BY-SA 4.0",
     licenceUrl: "https://creativecommons.org/licenses/by-sa/4.0",
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Tissot_watch_PRX_collection_23_January_2025_Philippines_black2.jpg",
@@ -386,7 +386,7 @@ export const imageCredits: Record<string, ImageCredit> = {
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Patek_Philippe_Aquanaut_Advanced_Research_ref._5650G_limitato_a_500_pezzi.jpg",
   },
   "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/TAG_Heuer_Carrera_blue.jpg/500px-TAG_Heuer_Carrera_blue.jpg": {
-    author: "Unknown",
+    author: "Fourdee",
     licence: "CC BY-SA 3.0",
     licenceUrl: "http://creativecommons.org/licenses/by-sa/3.0/",
     sourceUrl: "https://commons.wikimedia.org/wiki/File:TAG_Heuer_Carrera_blue.jpg",
